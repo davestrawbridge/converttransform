@@ -1,9 +1,81 @@
 var transform = angular.module("transform", ['ngclipboard']);
+
 var pattern = /(\w*\b)[^\(]*\(([\d\.-]+)[^\d-]*([\d\.-]+)[^\d-]*([\d\.-]+)[^\(]*\(([\d\.-]+)[^\d-]*([\d\.-]+)[^\d-]*([\d\.-]+)[^\(]*\(([\d\.-]+)[^\d-]*([\d\.-]+)[^\d-]*([\d\.-]+)[^\(]*\(([\d\.-]+)[^\d-]*([\d\.-]+)[^\d-]*([\d\.-]+)/;
-function parseXYZ(matches, start) {  return { x : parseFloat(matches[start]), y : parseFloat(matches[start+1]), z : parseFloat(matches[start+2]) };}
-function isBad(xyz) { return isNaN(xyz.x) || isNaN(xyz.y) || isNaN(xyz.z);}
-function pad(q) { return q.toString() + "    ";}//Controllerstransform.controller("transformer",function ($scope) {  $scope.badString = false; $scope.horizontal = false; $scope.includeCentre = true;
-    $scope.convert = function () {
-  $scope.badString = false;
-        var matches = $scope.excelFormat.match(pattern);    if (matches == null || matches.length != 14) {   $scope.badString = true;   return "";  }
-  var centre = parseXYZ(matches, 2);  if (isBad(centre)) {   $scope.badString = true;   return "";  }    var xAxis = parseXYZ(matches, 5);  if (isBad(xAxis)) {   $scope.badString = true;   return "";  }    var yAxis = parseXYZ(matches, 8);  if (isBad(yAxis)) {   $scope.badString = true;   return "";  }    var zAxis = parseXYZ(matches, 11);  if (isBad(zAxis)) {   $scope.badString = true;   return "";  }    if ($scope.includeCentre)  {   if ($scope.horizontal) {    var result = pad(xAxis.x) + pad(xAxis.y) + pad(xAxis.z) + "0\n" +        pad(yAxis.x) + pad(yAxis.y) + pad(yAxis.z) + "0\n" +        pad(zAxis.x) + pad(zAxis.y) + pad(zAxis.z) + "0\n" +        pad(centre.x) + pad(centre.y) + pad(centre.z) + "1\n";   } else {    var result = pad(xAxis.x) + pad(yAxis.x) + pad(zAxis.x) + pad(centre.x) + "\n" +        pad(xAxis.y) + pad(yAxis.y) + pad(zAxis.y) + pad(centre.y) + "\n" +        pad(xAxis.z) + pad(yAxis.z) + pad(zAxis.z) + pad(centre.z) + "\n" +        pad(0) + pad(0) + pad(0) + "1\n";   }  } else {   if ($scope.horizontal) {    var result = pad(xAxis.x) + pad(xAxis.y) + pad(xAxis.z) + "0\n" +        pad(yAxis.x) + pad(yAxis.y) + pad(yAxis.z) + "0\n" +        pad(zAxis.x) + pad(zAxis.y) + pad(zAxis.z) + "0\n" +        pad(0) + pad(0) + pad(0) + "1\n";   } else {    var result = pad(xAxis.x) + pad(yAxis.x) + pad(zAxis.x) + "0\n" +        pad(xAxis.y) + pad(yAxis.y) + pad(zAxis.y) + "0\n" +        pad(xAxis.z) + pad(yAxis.z) + pad(zAxis.z) + "0\n" +        pad(0) + pad(0) + pad(0) + "1\n";   }  }    //$scope.output = result;  return result;    }});
+
+function parseXYZ(matches, start) {  
+  return {
+    x: parseFloat(matches[start]),
+    y: parseFloat(matches[start + 1]),
+    z: parseFloat(matches[start + 2])
+  };
+}
+
+function isBad(xyz) { 
+  return isNaN(xyz.x) || isNaN(xyz.y) || isNaN(xyz.z);
+}
+
+function pad(q) { 
+  return q.toString() + "    ";
+}
+
+transform.controller("transformer", function($scope) {
+   
+  $scope.badString = false; 
+  $scope.horizontal = false; 
+  $scope.includeCentre = true;
+     
+  $scope.convert = function() {  
+    $scope.badString = false;       
+    var matches = $scope.excelFormat.match(pattern);    
+    if (matches == null || matches.length != 14) {   
+      $scope.badString = true;   
+      return "";  
+    }  
+    var centre = parseXYZ(matches, 2);  
+    if (isBad(centre)) {   
+      $scope.badString = true;   
+      return "";  
+    }    
+    var xAxis = parseXYZ(matches, 5);  
+    if (isBad(xAxis)) {   
+      $scope.badString = true;   
+      return "";  
+    }    
+    var yAxis = parseXYZ(matches, 8);  
+    if (isBad(yAxis)) {   
+      $scope.badString = true;   
+      return "";  
+    }    
+    var zAxis = parseXYZ(matches, 11);  
+    if (isBad(zAxis)) {   
+      $scope.badString = true;   
+      return "";  
+    }    
+    if ($scope.includeCentre)   {   
+      if ($scope.horizontal) {    
+        var result = pad(xAxis.x) + pad(xAxis.y) + pad(xAxis.z) + "0\n" +
+                     pad(yAxis.x) + pad(yAxis.y) + pad(yAxis.z) + "0\n" +
+                     pad(zAxis.x) + pad(zAxis.y) + pad(zAxis.z) + "0\n" +
+                     pad(centre.x) + pad(centre.y) + pad(centre.z) + "1\n";   
+      } else {    
+        var result = pad(xAxis.x) + pad(yAxis.x) + pad(zAxis.x) + pad(centre.x) + "\n" +
+                     pad(xAxis.y) + pad(yAxis.y) + pad(zAxis.y) + pad(centre.y) + "\n" +
+                     pad(xAxis.z) + pad(yAxis.z) + pad(zAxis.z) + pad(centre.z) + "\n" +
+                     pad(0) + pad(0) + pad(0) + "1\n";   
+      }  
+    } else {   
+      if ($scope.horizontal) {    
+        var result = pad(xAxis.x) + pad(xAxis.y) + pad(xAxis.z) + "0\n" +
+                     pad(yAxis.x) + pad(yAxis.y) + pad(yAxis.z) + "0\n" +
+                     pad(zAxis.x) + pad(zAxis.y) + pad(zAxis.z) + "0\n" +
+                     pad(0) + pad(0) + pad(0) + "1\n";   
+      } else {    
+        var result = pad(xAxis.x) + pad(yAxis.x) + pad(zAxis.x) + "0\n" +
+                     pad(xAxis.y) + pad(yAxis.y) + pad(zAxis.y) + "0\n" +
+                     pad(xAxis.z) + pad(yAxis.z) + pad(zAxis.z) + "0\n" +
+                     pad(0) + pad(0) + pad(0) + "1\n";   
+      }  
+    }  
+    return result;   
+  }
+});
