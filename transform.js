@@ -15,7 +15,9 @@ function isBad(xyz) { 
 }
 
 function pad(q) { 
-  return q.toString() + "    ";
+    if (q < 0)
+        return q.toFixed(3) + "    ";
+    return " " + q.toFixed(3) + "    ";
 }
 
 transform.controller("transformer", function($scope) {
@@ -26,31 +28,40 @@ transform.controller("transformer", function($scope) {
      
   $scope.convert = function() {  
     $scope.badString = false;       
+    if (!$scope.excelFormat)
+        return null;
+      
     var matches = $scope.excelFormat.match(pattern);    
     if (matches == null || matches.length != 14) {   
       $scope.badString = true;   
-      return "";  
+      return null;  
     }  
     var centre = parseXYZ(matches, 2);  
     if (isBad(centre)) {   
       $scope.badString = true;   
-      return "";  
+      return null;  
     }    
     var xAxis = parseXYZ(matches, 5);  
     if (isBad(xAxis)) {   
       $scope.badString = true;   
-      return "";  
+      return null;  
     }    
     var yAxis = parseXYZ(matches, 8);  
     if (isBad(yAxis)) {   
       $scope.badString = true;   
-      return "";  
+      return null;  
     }    
     var zAxis = parseXYZ(matches, 11);  
     if (isBad(zAxis)) {   
       $scope.badString = true;   
-      return "";  
-    }    
+      return null;  
+    }
+      
+    $scope.xAxis = xAxis;
+    $scope.yAxis = yAxis;
+    $scope.zAxis = zAxis;
+    $scope.centre = centre;
+      
     if ($scope.includeCentre)   {   
       if ($scope.horizontal) {    
         var result = pad(xAxis.x) + pad(xAxis.y) + pad(xAxis.z) + "0\n" +
