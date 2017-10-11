@@ -1,6 +1,6 @@
 var transform = angular.module("transform", ['ngclipboard']);
 
-var pattern = /(\w*\b)[^\(]*\(([\d\.-]+)[^\d-]*([\d\.-]+)[^\d-]*([\d\.-]+)[^\(]*\(([\d\.-]+)[^\d-]*([\d\.-]+)[^\d-]*([\d\.-]+)[^\(]*\(([\d\.-]+)[^\d-]*([\d\.-]+)[^\d-]*([\d\.-]+)[^\(]*\(([\d\.-]+)[^\d-]*([\d\.-]+)[^\d-]*([\d\.-]+)/;
+var pattern = /(\w*\b)?[^\(]*\(([\d\.-]+)[^\d-]*([\d\.-]+)[^\d-]*([\d\.-]+)[^\(]*\(([\d\.-]+)[^\d-]*([\d\.-]+)[^\d-]*([\d\.-]+)[^\(]*\(([\d\.-]+)[^\d-]*([\d\.-]+)[^\d-]*([\d\.-]+)[^\(]*\(([\d\.-]+)[^\d-]*([\d\.-]+)[^\d-]*([\d\.-]+)/;
 
 function parseXYZ(matches, start) {  
   return {
@@ -32,26 +32,35 @@ transform.controller("transformer", function($scope) {
         return null;
       
     var matches = $scope.excelFormat.match(pattern);    
-    if (matches == null || matches.length != 14) {   
+    if (matches == null || matches.length < 13 ||  matches.length > 14) {   
       $scope.badString = true;   
       return null;  
     }  
-    var centre = parseXYZ(matches, 2);  
+    var includeName = (matches.length == 14);
+    var offset = 1;
+    if (includeName) offset = 2;
+      
+    var centre = parseXYZ(matches, offset);
     if (isBad(centre)) {   
       $scope.badString = true;   
       return null;  
-    }    
-    var xAxis = parseXYZ(matches, 5);  
+    }
+    offset += 3;
+      
+    var xAxis = parseXYZ(matches, offset);  
     if (isBad(xAxis)) {   
       $scope.badString = true;   
       return null;  
     }    
-    var yAxis = parseXYZ(matches, 8);  
+    offset += 3;
+
+    var yAxis = parseXYZ(matches, offset);  
     if (isBad(yAxis)) {   
       $scope.badString = true;   
       return null;  
     }    
-    var zAxis = parseXYZ(matches, 11);  
+    offset += 3;
+    var zAxis = parseXYZ(matches, offset);  
     if (isBad(zAxis)) {   
       $scope.badString = true;   
       return null;  
