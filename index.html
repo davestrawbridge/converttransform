@@ -30,10 +30,10 @@
             <div class="col-lg-12">
                 <div class="alert alert-danger" ng-show="badString"> <strong>The pasted text could not be understood</strong> </div>
                 <textarea rows="10" cols="60" id="output" ng-model="convert()" style="width:100%; font-family:monospace" placeholder="Result will appear here"> </textarea>
-                <button type="button" class="btn btn-default" ngclipboard data-clipboard-action="copy" data-clipboard-target="#output">Copy</button>
+                <button type="button" class="btn btn-primary" ngclipboard data-clipboard-action="copy" data-clipboard-target="#output">Copy to clipboard</button>
             </div>
         </div>
-        <div class="footer">source on <a href="https://github.com/davestrawbridge/converttransform">Github</a></div>
+        <div class="footer">source available from <a href="https://github.com/davestrawbridge/converttransform">Github</a></div>
     </div>
     <script src="angular.min.js"></script>
     <script src="clipboard.min.js"></script>
