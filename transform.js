@@ -23,8 +23,8 @@ function pad(q) { 
 transform.controller("transformer", function($scope) {
    
   $scope.badString = false; 
-  $scope.horizontal = false; 
-  $scope.includeCentre = true;
+  $scope.horizontal = true; 
+  $scope.includeCentre = false;
      
   $scope.convert = function() {  
     $scope.badString = false;       
